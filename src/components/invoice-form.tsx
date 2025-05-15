@@ -3,6 +3,9 @@
 // SECTION: Imports
 import { useState, FormEvent } from "react";
 import { Invoice, InvoiceItem } from "@/types/invoice";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Label } from "./ui/label";
 
 // SECTION: Component
 export default function InvoiceForm({
@@ -141,9 +144,146 @@ export default function InvoiceForm({
 
   // SECTION: Render
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
+    <form onSubmit={handleSubmit} className="mx-auto p-4">
       {/* SECTION: Form Header */}
-      <h2 className="text-xl font-bold mb-4">Create Invoice</h2>
+      <div className="grid md:grid-cols-2 gap-8 pb-4 border-b">
+        {/* Left column - Recipient Information */}
+        <div>
+          <h2 className="text-lg font-medium mb-4">Vastaanottajan tiedot</h2>
+          <div className="space-y-2">
+            <div className="flex items-center">
+              <Label htmlFor="name" className="w-48 flex-row-reverse pr-2">
+                Nimi
+              </Label>
+              <Input
+                type="text"
+                id="name"
+                name="name"
+                className="flex-1 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <Label
+                htmlFor="contactPerson"
+                className="w-48 flex-row-reverse pr-2"
+              >
+                Yhteyshenkilö
+              </Label>
+              <Input
+                type="text"
+                id="contactPerson"
+                name="contactPerson"
+                className="flex-1 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <Label htmlFor="address" className="w-48 flex-row-reverse pr-2">
+                Postiosoite
+              </Label>
+              <Input
+                type="text"
+                id="address"
+                name="address"
+                className="flex-1 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <Label
+                htmlFor="postalCode"
+                className="w-48 flex-row-reverse pr-2 text-sm"
+              >
+                Postinumero ja -toimipaikka
+              </Label>
+              <Input
+                type="text"
+                id="postalCode"
+                name="postalCode"
+                className="flex-1 text-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Right column - Invoice Information */}
+        <div>
+          <h2 className="text-lg font-medium mb-4">Laskun tiedot</h2>
+          <div className="space-y-2">
+            <div className="flex items-center">
+              <Label
+                htmlFor="invoiceNumber"
+                className="w-48 flex-row-reverse pr-2"
+              >
+                Laskun numero
+              </Label>
+              <Input
+                type="text"
+                id="invoiceNumber"
+                name="invoiceNumber"
+                className="flex-1 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <Label
+                htmlFor="invoice-date"
+                className="w-48 flex-row-reverse pr-2"
+              >
+                Päiväys
+              </Label>
+              <Input
+                type="date"
+                id="invoice-date"
+                name="invoice-date"
+                className="flex-1 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <Label
+                htmlFor="invoice-due-date"
+                className="w-48 flex-row-reverse pr-2"
+              >
+                Eräpäivä
+              </Label>
+              <Input
+                type="date"
+                id="invoice-due-date"
+                name="invoice-due-date"
+                className="flex-1 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <Label htmlFor="name" className="w-48 flex-row-reverse pr-2">
+                Viivästyskorko
+              </Label>
+              <Input
+                type="number"
+                id="interestRate"
+                name="interestRate"
+                className="flex-1 text-sm"
+              />
+            </div>
+            <div className="flex items-center">
+              <Label
+                htmlFor="invoice-reference"
+                className="w-48 flex-row-reverse pr-2"
+              >
+                Viitenumero
+              </Label>
+              <Input
+                type="text"
+                id="invoice-reference"
+                name="invoice-reference"
+                className="flex-1 text-sm"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* SECTION: Sender Name */}
       <div className="mb-4">
