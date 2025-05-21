@@ -16,6 +16,10 @@ export interface Invoice {
   };
   details: {
     invoiceNumber: string;
+    date: string;
+    dueDate: string;
+    reference: string;
+    interestRate: number;
   };
   items: InvoiceItem[];
 }

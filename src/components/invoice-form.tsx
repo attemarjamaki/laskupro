@@ -15,10 +15,18 @@ export default function InvoiceForm({
 }) {
   // SECTION: State Management
   // Initialize form state with default values matching the Invoice type
-  const [formData, setFormData] = useState<Invoice>({
+  const [invoice, setInvoice] = useState<Invoice>({
     sender: { name: "" },
     recipient: { name: "" },
-    details: { invoiceNumber: "" },
+    details: {
+      invoiceNumber: "",
+      date: new Date().toISOString().split("T")[0],
+      dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
+      reference: "",
+      interestRate: 8,
+    },
     items: [
       {
         id: "1",
@@ -51,10 +59,21 @@ export default function InvoiceForm({
     value: string
   ) => {
     const [parent, child] = field.split(".");
-    setFormData((prev) => ({
+    setInvoice((prev) => ({
       ...prev,
       [parent]: { ...prev[parent as keyof Invoice], [child]: value },
     }));
+  };
+
+  // Update Details (Laskun tiedot) information (invoicenumber, date, dueDate, reference, interestRate)
+  const updateDetails = (field: any, value: any) => {
+    setInvoice({
+      ...invoice,
+      details: {
+        ...invoice.details,
+        [field]: value,
+      },
+    });
   };
 
   // Update item fields (description, quantity, price, taxRate, taxIncluded)
@@ -63,7 +82,7 @@ export default function InvoiceForm({
     field: keyof InvoiceItem,
     value: string | number | boolean
   ) => {
-    setFormData((prev) => {
+    setInvoice((prev) => {
       const newItems = [...prev.items];
       newItems[index] = { ...newItems[index], [field]: value };
       return { ...prev, items: newItems };
@@ -72,9 +91,9 @@ export default function InvoiceForm({
 
   // Add a new item with an incremented ID
   const handleAddItem = () => {
-    const nextId = formData.items.length
+    const nextId = invoice.items.length
       ? (
-          Math.max(...formData.items.map((item) => parseInt(item.id, 10))) + 1
+          Math.max(...invoice.items.map((item) => parseInt(item.id, 10))) + 1
         ).toString()
       : "1";
     const newItem: InvoiceItem = {
@@ -85,7 +104,7 @@ export default function InvoiceForm({
       taxRate: 0,
       taxIncluded: false,
     };
-    setFormData((prev) => ({
+    setInvoice((prev) => ({
       ...prev,
       items: [...prev.items, newItem],
     }));
@@ -93,7 +112,7 @@ export default function InvoiceForm({
 
   // Remove an item by index
   const handleRemoveItem = (index: number) => {
-    setFormData((prev) => ({
+    setInvoice((prev) => ({
       ...prev,
       items: prev.items.filter((_, i) => i !== index),
     }));
@@ -105,13 +124,13 @@ export default function InvoiceForm({
 
     // Basic validation
     const newErrors: typeof errors = { items: [] };
-    if (!formData.sender.name) newErrors.senderName = "Sender name is required";
-    if (!formData.recipient.name)
+    if (!invoice.sender.name) newErrors.senderName = "Sender name is required";
+    if (!invoice.recipient.name)
       newErrors.recipientName = "Recipient name is required";
-    if (!formData.details.invoiceNumber)
+    if (!invoice.details.invoiceNumber)
       newErrors.invoiceNumber = "Invoice number is required";
 
-    formData.items.forEach((item, index) => {
+    invoice.items.forEach((item, index) => {
       const itemErrors: {
         description?: string;
         quantity?: string;
@@ -139,7 +158,7 @@ export default function InvoiceForm({
     }
 
     // Submit valid data
-    onSubmit(formData);
+    onSubmit(invoice);
   };
 
   // SECTION: Render
@@ -213,15 +232,17 @@ export default function InvoiceForm({
           <div className="space-y-2">
             <div className="flex items-center">
               <Label
-                htmlFor="invoiceNumber"
+                htmlFor="invoice-number"
                 className="w-48 flex-row-reverse pr-2"
               >
                 Laskun numero
               </Label>
               <Input
                 type="text"
-                id="invoiceNumber"
-                name="invoiceNumber"
+                id="invoice-number"
+                name="invoice-number"
+                value={invoice.details.invoiceNumber}
+                onChange={(e) => updateDetails("invoiceNumber", e.target.value)}
                 className="flex-1 text-sm"
               />
             </div>
@@ -237,6 +258,8 @@ export default function InvoiceForm({
                 type="date"
                 id="invoice-date"
                 name="invoice-date"
+                value={invoice.details.date}
+                onChange={(e) => updateDetails("date", e.target.value)}
                 className="flex-1 text-sm"
               />
             </div>
@@ -252,18 +275,25 @@ export default function InvoiceForm({
                 type="date"
                 id="invoice-due-date"
                 name="invoice-due-date"
+                value={invoice.details.dueDate}
+                onChange={(e) => updateDetails("dueDate", e.target.value)}
                 className="flex-1 text-sm"
               />
             </div>
 
             <div className="flex items-center">
-              <Label htmlFor="name" className="w-48 flex-row-reverse pr-2">
+              <Label
+                htmlFor="interest-rate"
+                className="w-48 flex-row-reverse pr-2"
+              >
                 Viivästyskorko
               </Label>
               <Input
                 type="number"
-                id="interestRate"
-                name="interestRate"
+                id="interest-rate"
+                name="interest-rate"
+                value={invoice.details.interestRate}
+                onChange={(e) => updateDetails("interestRate", e.target.value)}
                 className="flex-1 text-sm"
               />
             </div>
@@ -278,6 +308,8 @@ export default function InvoiceForm({
                 type="text"
                 id="invoice-reference"
                 name="invoice-reference"
+                value={invoice.details.reference}
+                onChange={(e) => updateDetails("reference", e.target.value)}
                 className="flex-1 text-sm"
               />
             </div>
@@ -289,7 +321,7 @@ export default function InvoiceForm({
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Sender Name</label>
         <input
-          value={formData.sender.name}
+          value={invoice.sender.name}
           onChange={(e) => handleInputChange("sender.name", e.target.value)}
           placeholder="Sender Name"
           className="w-full p-2 border rounded"
@@ -303,7 +335,7 @@ export default function InvoiceForm({
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Recipient Name</label>
         <input
-          value={formData.recipient.name}
+          value={invoice.recipient.name}
           onChange={(e) => handleInputChange("recipient.name", e.target.value)}
           placeholder="Recipient Name"
           className="w-full p-2 border rounded"
@@ -317,7 +349,7 @@ export default function InvoiceForm({
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Invoice Number</label>
         <input
-          value={formData.details.invoiceNumber}
+          value={invoice.details.invoiceNumber}
           onChange={(e) =>
             handleInputChange("details.invoiceNumber", e.target.value)
           }
@@ -332,7 +364,7 @@ export default function InvoiceForm({
       {/* SECTION: Items */}
       <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2">Items</h3>
-        {formData.items.map((item, index) => (
+        {invoice.items.map((item, index) => (
           <div key={item.id} className="mb-4 p-4 border rounded">
             {/* Item Description */}
             <div className="mb-2">

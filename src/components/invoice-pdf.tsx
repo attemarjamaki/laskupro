@@ -33,6 +33,10 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
           </Text>
         ))}
         <Text style={styles.text}>Total: ${totalTaxExcl}</Text>
+        <Text>{invoice.details.date}</Text>
+        <Text>{invoice.details.dueDate}</Text>
+        <Text>{invoice.details.interestRate}</Text>
+        <Text>{invoice.details.reference}</Text>
       </Page>
     </Document>
   );
