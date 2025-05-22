@@ -17,7 +17,12 @@ export default function InvoiceForm({
   // Initialize form state with default values matching the Invoice type
   const [invoice, setInvoice] = useState<Invoice>({
     sender: { name: "" },
-    recipient: { name: "" },
+    recipient: {
+      name: "",
+      contactPerson: "",
+      address: "",
+      postCodeAndCity: "",
+    },
     details: {
       invoiceNumber: "",
       date: new Date().toISOString().split("T")[0],
@@ -71,6 +76,17 @@ export default function InvoiceForm({
       ...invoice,
       details: {
         ...invoice.details,
+        [field]: value,
+      },
+    });
+  };
+
+  // Update Recipient (Vastaanottajan tiedot) information (name, contactPerson, address, postCodeAndCity)
+  const updateRecipient = (field: any, value: any) => {
+    setInvoice({
+      ...invoice,
+      recipient: {
+        ...invoice.recipient,
         [field]: value,
       },
     });

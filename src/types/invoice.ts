@@ -13,6 +13,9 @@ export interface Invoice {
   };
   recipient: {
     name: string;
+    contactPerson: string;
+    address: string;
+    postCodeAndCity: string;
   };
   details: {
     invoiceNumber: string;
