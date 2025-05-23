@@ -3,9 +3,18 @@
 // SECTION: Imports
 import { useState, FormEvent } from "react";
 import { Invoice, InvoiceItem } from "@/types/invoice";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "./ui/checkbox";
+import { Printer, Download, Plus, Trash2 } from "lucide-react";
 
 // SECTION: Component
 export default function InvoiceForm({
@@ -112,7 +121,6 @@ export default function InvoiceForm({
     });
   };
 
-  // Update item fields (Selite, Määrä, Hinta...)
   const handleItemChange = (
     index: number,
     field: keyof InvoiceItem,
@@ -120,12 +128,14 @@ export default function InvoiceForm({
   ) => {
     setInvoice((prev) => {
       const newItems = [...prev.items];
-      newItems[index] = { ...newItems[index], [field]: value };
+      newItems[index] = {
+        ...newItems[index],
+        [field]: field === "taxRate" ? parseFloat(value as string) : value,
+      };
       return { ...prev, items: newItems };
     });
   };
 
-  // Add a new item with an incremented ID
   const handleAddItem = () => {
     const nextId = invoice.items.length
       ? (
@@ -147,11 +157,70 @@ export default function InvoiceForm({
   };
 
   // Remove an item by index
+  // this also
   const handleRemoveItem = (index: number) => {
     setInvoice((prev) => ({
       ...prev,
       items: prev.items.filter((_, i) => i !== index),
     }));
+  };
+
+  // Helper function calculations
+  const calculateItemNetPrice = (item: any) => {
+    if (item.taxIncluded) {
+      // If tax is included, we need to extract it
+      return (item.price * item.quantity) / (1 + item.taxRate / 100);
+    }
+    return item.price * item.quantity;
+  };
+
+  const calculateItemTaxAmount = (item: any) => {
+    if (item.taxIncluded) {
+      // If tax is included, calculate the tax portion
+      const netAmount = calculateItemNetPrice(item);
+      return item.price * item.quantity - netAmount;
+    } else {
+      // If tax is not included, calculate the tax to be added
+      return (item.price * item.quantity * item.taxRate) / 100;
+    }
+  };
+
+  const calculateItemTotalPrice = (item: any) => {
+    if (item.taxIncluded) {
+      // If tax is included, the total is simply price * quantity
+      return item.price * item.quantity;
+    } else {
+      // If tax is not included, add the tax to the price * quantity
+      return item.price * item.quantity + calculateItemTaxAmount(item);
+    }
+  };
+
+  const calculateSubtotal = () => {
+    return invoice.items.reduce(
+      (sum, item) => sum + calculateItemNetPrice(item),
+      0
+    );
+  };
+
+  const calculateTaxAmount = () => {
+    return invoice.items.reduce(
+      (sum, item) => sum + calculateItemTaxAmount(item),
+      0
+    );
+  };
+
+  const calculateTotal = () => {
+    return invoice.items.reduce(
+      (sum, item) => sum + calculateItemTotalPrice(item),
+      0
+    );
+  };
+
+  const formatCurrency = (amount: any) => {
+    return new Intl.NumberFormat("fi-FI", {
+      style: "currency",
+      currency: "EUR",
+    }).format(amount);
   };
 
   // SECTION: Form Submission
@@ -160,11 +229,13 @@ export default function InvoiceForm({
 
     // Basic validation
     const newErrors: typeof errors = { items: [] };
+    /*
     if (!invoice.sender.name) newErrors.senderName = "Sender name is required";
     if (!invoice.recipient.name)
       newErrors.recipientName = "Recipient name is required";
     if (!invoice.details.invoiceNumber)
       newErrors.invoiceNumber = "Invoice number is required";
+    */
 
     invoice.items.forEach((item, index) => {
       const itemErrors: {
@@ -370,6 +441,117 @@ export default function InvoiceForm({
               />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* SECTION: Items for invoice */}
+
+      <div className="pt-4">
+        <h2 className="text-lg font-semibold mb-4">Laskun rivit</h2>
+        <div className="space-y-4">
+          {invoice.items.map((item, index) => (
+            <div key={item.id} className="grid grid-cols-12 gap-2 items-end">
+              <div className="col-span-12 md:col-span-6 space-y-2">
+                <Label htmlFor={`item-description-${index}`}>Selite</Label>
+                <Input
+                  id={`item-description-${index}`}
+                  value={item.description}
+                  onChange={(e) =>
+                    handleItemChange(index, "description", e.target.value)
+                  }
+                  className="mb-1"
+                />
+              </div>
+              <div className="col-span-2 md:col-span-1 space-y-2">
+                <Label htmlFor={`item-quantity-${index}`}>Määrä</Label>
+                <Input
+                  id={`item-quantity-${index}`}
+                  type="number"
+                  min="1"
+                  value={item.quantity}
+                  onChange={(e) =>
+                    handleItemChange(index, "quantity", e.target.value)
+                  }
+                  className="mb-1"
+                />
+              </div>
+              <div className="col-span-4 md:col-span-2 space-y-2">
+                <Label htmlFor={`item-price-${index}`}>Hinta €</Label>
+                <Input
+                  id={`item-price-${index}`}
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={item.price}
+                  onChange={(e) =>
+                    handleItemChange(index, "price", parseFloat(e.target.value))
+                  }
+                  className="mb-1"
+                />
+              </div>
+
+              <div className="col-span-4 md:col-span-2 space-y-2">
+                <Label htmlFor={`item-tax-${index}`}>ALV %</Label>
+                <Select
+                  value={item.taxRate.toString()}
+                  onValueChange={(value) =>
+                    handleItemChange(index, "taxRate", parseFloat(value))
+                  }
+                >
+                  <SelectTrigger
+                    className="mb-1 w-full"
+                    id={`item-tax-${index}`}
+                  >
+                    <SelectValue placeholder="ALV %" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">0%</SelectItem>
+                    <SelectItem value="10">10%</SelectItem>
+                    <SelectItem value="14">14%</SelectItem>
+                    <SelectItem value="24">24%</SelectItem>
+                    <SelectItem value="25.5">25,5%</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2 md:col-span-1 flex items-center justify-end">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveItem(index)}
+                  disabled={invoice.items.length <= 1}
+                  className="bg-red-200 hover:bg-red-300"
+                >
+                  <Trash2 />
+                </Button>
+              </div>
+
+              <div className="col-span-12 flex items-center space-x-2 mt-1">
+                <Checkbox
+                  id={`tax-included-${index}`}
+                  checked={item.taxIncluded}
+                  onCheckedChange={(checked) =>
+                    handleItemChange(index, "taxIncluded", checked)
+                  }
+                />
+                <Label htmlFor={`tax-included-${index}`} className="text-sm">
+                  ALV sisältyy hintaan ({formatCurrency(item.price)}{" "}
+                  {item.taxIncluded
+                    ? `sis. ALV ${formatCurrency(calculateItemTaxAmount(item))}`
+                    : `+ ALV ${formatCurrency(
+                        calculateItemTaxAmount(item)
+                      )} = ${formatCurrency(calculateItemTotalPrice(item))}`}
+                  )
+                </Label>
+              </div>
+            </div>
+          ))}
+          <Button
+            onClick={handleAddItem}
+            variant="outline"
+            className="w-full rounded-sm"
+          >
+            <Plus className="h-4 w-4 mr-2" /> Lisää rivi
+          </Button>
         </div>
       </div>
 

@@ -12,16 +12,7 @@ export async function POST(request: Request) {
     if (
       !invoice.sender.name ||
       !invoice.recipient.name ||
-      !invoice.details.invoiceNumber ||
-      !invoice.items.length ||
-      invoice.items.some(
-        (item) =>
-          !item.id ||
-          !item.description ||
-          typeof item.quantity !== "number" ||
-          typeof item.price !== "number" ||
-          typeof item.taxRate !== "number"
-      )
+      !invoice.details.invoiceNumber
     ) {
       return NextResponse.json(
         { error: "Invalid invoice data" },

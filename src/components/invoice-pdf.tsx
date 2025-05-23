@@ -1,5 +1,6 @@
 import { Document, Page, Text, StyleSheet, View } from "@react-pdf/renderer";
 import { Invoice } from "@/types/invoice";
+import { InvoiceItem } from "@/types/invoice";
 
 const styles = StyleSheet.create({
   page: {
@@ -47,8 +48,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   tableHeader: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#D1D5DB",
     fontWeight: "bold",
   },
   tableCell: {
@@ -91,6 +90,21 @@ const styles = StyleSheet.create({
 });
 
 export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
+  // Calculate totals
+  const calculateItemTaxAmount = (item: InvoiceItem) => {
+    const price = item.taxIncluded
+      ? item.price / (1 + item.taxRate / 100)
+      : item.price;
+    return price * (item.taxRate / 100) * item.quantity;
+  };
+
+  const calculateItemTotalPrice = (item: InvoiceItem) => {
+    const price = item.taxIncluded
+      ? item.price / (1 + item.taxRate / 100)
+      : item.price;
+    return (price + price * (item.taxRate / 100)) * item.quantity;
+  };
+
   const totalTaxExcl = invoice.items
     .reduce((sum, item) => {
       const price = item.taxIncluded
@@ -99,6 +113,21 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
       return sum + price * item.quantity;
     }, 0)
     .toFixed(2);
+
+  const totalTax = invoice.items
+    .reduce((sum, item) => sum + calculateItemTaxAmount(item), 0)
+    .toFixed(2);
+
+  const totalInclTax = invoice.items
+    .reduce((sum, item) => sum + calculateItemTotalPrice(item), 0)
+    .toFixed(2);
+
+  const formatCurrency = (amount: any) => {
+    return new Intl.NumberFormat("fi-FI", {
+      style: "currency",
+      currency: "EUR",
+    }).format(amount);
+  };
 
   return (
     <Document>
@@ -177,15 +206,20 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
                 <Text style={styles.tableCell}>{item.description}</Text>
                 <Text style={styles.tableCellRight}>{item.quantity}</Text>
                 <Text style={styles.tableCellRight}>
-                  {(item.taxIncluded
-                    ? item.price / (1 + item.taxRate / 100)
-                    : item.price
-                  ).toFixed(2)}{" "}
-                  €
+                  {formatCurrency(
+                    (item.taxIncluded
+                      ? item.price / (1 + item.taxRate / 100)
+                      : item.price
+                    ).toFixed(2)
+                  )}
                 </Text>
                 <Text style={styles.tableCellRight}>{item.taxRate}%</Text>
-                <Text style={styles.tableCellRight}>00 €</Text>
-                <Text style={styles.tableCellRight}>00 €</Text>
+                <Text style={styles.tableCellRight}>
+                  {formatCurrency(calculateItemTaxAmount(item).toFixed(2))}
+                </Text>
+                <Text style={styles.tableCellRight}>
+                  {formatCurrency(calculateItemTotalPrice(item).toFixed(2))}
+                </Text>
               </View>
             ))}
           </View>
@@ -194,11 +228,11 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
           <View style={styles.summary}>
             <View style={styles.summaryRow}>
               <Text>Veroton hinta</Text>
-              <Text>{totalTaxExcl} €</Text>
+              <Text>{formatCurrency(totalTaxExcl)}</Text>
             </View>
             <View style={styles.summaryRow}>
               <Text>Arvonlisävero</Text>
-              <Text>100 €</Text>
+              <Text>{formatCurrency(totalTax)}</Text>
             </View>
             <View
               style={[
@@ -207,12 +241,12 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
               ]}
             >
               <Text>Yhteensä:</Text>
-              <Text>69 €</Text>
+              <Text>{formatCurrency(totalInclTax)}</Text>
             </View>
           </View>
 
           {/* Footer Section */}
-          <View style={styles.footer}>
+          <View style={[styles.footer, { marginTop: 40 }]}>
             <View>
               <Text style={[styles.textBold, { marginBottom: 8 }]}>
                 Yritystiedot
