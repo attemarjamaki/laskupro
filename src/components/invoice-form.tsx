@@ -32,8 +32,10 @@ export default function InvoiceForm({
       buisnessId: "",
       email: "",
       phone: "",
+      website: "",
       iban: "",
       bic: "",
+      bank: "",
     },
     recipient: {
       name: "",
@@ -76,17 +78,6 @@ export default function InvoiceForm({
   }>({});
 
   // SECTION: Handler Functions
-  // Update top-level fields (sender.name, recipient.name, details.invoiceNumber)
-  const handleInputChange = (
-    field: "sender.name" | "recipient.name" | "details.invoiceNumber",
-    value: string
-  ) => {
-    const [parent, child] = field.split(".");
-    setInvoice((prev) => ({
-      ...prev,
-      [parent]: { ...prev[parent as keyof Invoice], [child]: value },
-    }));
-  };
 
   // Update Sender Details fields (Laskuttaja)
   const updateSender = (field: any, value: string) => {
@@ -255,22 +246,29 @@ export default function InvoiceForm({
 
     // If there are errors, stop submission
     if (
-      newErrors.senderName ||
-      newErrors.recipientName ||
-      newErrors.invoiceNumber ||
       //@ts-ignore
       newErrors.items.some((item) => Object.keys(item).length > 0)
     ) {
       return;
     }
-
     // Submit valid data
     onSubmit(invoice);
   };
 
   // SECTION: Render
   return (
-    <form onSubmit={handleSubmit} className="mx-auto p-4">
+    <form onSubmit={handleSubmit} className="mx-auto">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center">
+          <h2 className="text-2xl font-semibold">Luo lasku</h2>
+        </div>
+        <div>
+          <Button type="submit" variant="default">
+            Esikatsele PDF
+          </Button>
+        </div>
+      </div>
+
       {/* SECTION: Form Header */}
       <div className="grid md:grid-cols-2 gap-8 pb-4 border-b">
         {/* Left column - Recipient Information */}
@@ -446,7 +444,7 @@ export default function InvoiceForm({
 
       {/* SECTION: Items for invoice */}
 
-      <div className="pt-4">
+      <div className="py-4 border-b">
         <h2 className="text-lg font-semibold mb-4">Laskun rivit</h2>
         <div className="space-y-4">
           {invoice.items.map((item, index) => (
@@ -459,7 +457,7 @@ export default function InvoiceForm({
                   onChange={(e) =>
                     handleItemChange(index, "description", e.target.value)
                   }
-                  className="mb-1"
+                  className="h-8"
                 />
               </div>
               <div className="col-span-2 md:col-span-1 space-y-2">
@@ -472,7 +470,7 @@ export default function InvoiceForm({
                   onChange={(e) =>
                     handleItemChange(index, "quantity", e.target.value)
                   }
-                  className="mb-1"
+                  className="h-8"
                 />
               </div>
               <div className="col-span-4 md:col-span-2 space-y-2">
@@ -486,7 +484,7 @@ export default function InvoiceForm({
                   onChange={(e) =>
                     handleItemChange(index, "price", parseFloat(e.target.value))
                   }
-                  className="mb-1"
+                  className="h-8"
                 />
               </div>
 
@@ -499,7 +497,7 @@ export default function InvoiceForm({
                   }
                 >
                   <SelectTrigger
-                    className="mb-1 w-full"
+                    className="h-8 mb-0 w-full"
                     id={`item-tax-${index}`}
                   >
                     <SelectValue placeholder="ALV %" />
@@ -555,191 +553,179 @@ export default function InvoiceForm({
         </div>
       </div>
 
-      {/* SECTION: Sender Name */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Sender Name</label>
-        <input
-          value={invoice.sender.name}
-          onChange={(e) => handleInputChange("sender.name", e.target.value)}
-          placeholder="Sender Name"
-          className="w-full p-2 border rounded"
-        />
-        {errors.senderName && (
-          <p className="text-red-500 text-sm">{errors.senderName}</p>
-        )}
-      </div>
-
-      {/* SECTION: Recipient Name */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Recipient Name</label>
-        <input
-          value={invoice.recipient.name}
-          onChange={(e) => handleInputChange("recipient.name", e.target.value)}
-          placeholder="Recipient Name"
-          className="w-full p-2 border rounded"
-        />
-        {errors.recipientName && (
-          <p className="text-red-500 text-sm">{errors.recipientName}</p>
-        )}
-      </div>
-
-      {/* SECTION: Invoice Number */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Invoice Number</label>
-        <input
-          value={invoice.details.invoiceNumber}
-          onChange={(e) =>
-            handleInputChange("details.invoiceNumber", e.target.value)
-          }
-          placeholder="Invoice Number"
-          className="w-full p-2 border rounded"
-        />
-        {errors.invoiceNumber && (
-          <p className="text-red-500 text-sm">{errors.invoiceNumber}</p>
-        )}
-      </div>
-
-      {/* SECTION: Items */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2">Items</h3>
-        {invoice.items.map((item, index) => (
-          <div key={item.id} className="mb-4 p-4 border rounded">
-            {/* Item Description */}
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">
-                Description
-              </label>
-              <input
-                value={item.description}
-                onChange={(e) =>
-                  handleItemChange(index, "description", e.target.value)
-                }
-                placeholder="Description"
-                className="w-full p-2 border rounded"
-              />
-              {errors.items?.[index]?.description && (
-                <p className="text-red-500 text-sm">
-                  {errors.items[index].description}
-                </p>
-              )}
-            </div>
-
-            {/* Item Quantity */}
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">Quantity</label>
-              <input
-                type="number"
-                value={item.quantity}
-                onChange={(e) =>
-                  handleItemChange(
-                    index,
-                    "quantity",
-                    parseInt(e.target.value, 10)
-                  )
-                }
-                placeholder="Quantity"
-                className="w-full p-2 border rounded"
-                min="1"
-              />
-              {errors.items?.[index]?.quantity && (
-                <p className="text-red-500 text-sm">
-                  {errors.items[index].quantity}
-                </p>
-              )}
-            </div>
-
-            {/* Item Price */}
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">Price</label>
-              <input
-                type="number"
-                step="0.01"
-                value={item.price}
-                onChange={(e) =>
-                  handleItemChange(index, "price", parseFloat(e.target.value))
-                }
-                placeholder="Price"
-                className="w-full p-2 border rounded"
-                min="0"
-              />
-              {errors.items?.[index]?.price && (
-                <p className="text-red-500 text-sm">
-                  {errors.items[index].price}
-                </p>
-              )}
-            </div>
-
-            {/* Item Tax Rate */}
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">
-                Tax Rate (%)
-              </label>
-              <select
-                value={item.taxRate}
-                onChange={(e) =>
-                  handleItemChange(
-                    index,
-                    "taxRate",
-                    parseInt(e.target.value, 10)
-                  )
-                }
-                className="w-full p-2 border rounded"
-              >
-                <option value={0}>0%</option>
-                <option value={10}>10%</option>
-                <option value={14}>14%</option>
-                <option value={24}>24%</option>
-              </select>
-              {errors.items?.[index]?.taxRate && (
-                <p className="text-red-500 text-sm">
-                  {errors.items[index].taxRate}
-                </p>
-              )}
-            </div>
-
-            {/* Item Tax Included */}
-            <div className="mb-2">
-              <label className="block text-sm font-medium mb-1">
-                <input
-                  type="checkbox"
-                  checked={item.taxIncluded}
-                  onChange={(e) =>
-                    handleItemChange(index, "taxIncluded", e.target.checked)
-                  }
-                  className="mr-2"
+      {/* SECTION: Sender Information */}
+      <div className="py-4 mx-auto">
+        <h2 className="text-lg font-medium mb-4">Omat tiedot</h2>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+          {/* Left column - Company Information */}
+          <div>
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <Label
+                  htmlFor="company-name"
+                  className="w-39 flex-row-reverse pr-2"
+                >
+                  Nimi
+                </Label>
+                <Input
+                  type="text"
+                  id="company-name"
+                  name="name"
+                  value={invoice.sender.name}
+                  onChange={(e) => updateSender("name", e.target.value)}
+                  className="flex-1 text-sm"
                 />
-                Tax Included
-              </label>
+              </div>
+
+              <div className="flex items-center">
+                <Label
+                  htmlFor="business-id"
+                  className="w-39 flex-row-reverse pr-2"
+                >
+                  Y-tunnus
+                </Label>
+                <Input
+                  type="text"
+                  id="business-id"
+                  name="business-id"
+                  value={invoice.sender.buisnessId}
+                  onChange={(e) => updateSender("buisnessId", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+
+              <div className="flex items-center">
+                <Label
+                  htmlFor="company-address"
+                  className="w-39 flex-row-reverse pr-2"
+                >
+                  Postiosoite
+                </Label>
+                <Input
+                  type="text"
+                  id="company-address"
+                  name="address"
+                  value={invoice.sender.address}
+                  onChange={(e) => updateSender("address", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+
+              <div className="flex items-center">
+                <Label
+                  htmlFor="company-post-code-and-city"
+                  className="w-39 flex-row-reverse pr-2"
+                >
+                  Postinro ja -toimipaikka
+                </Label>
+                <Input
+                  type="text"
+                  id="company-post-code-and-city"
+                  name="post-code-and-city"
+                  value={invoice.sender.postCodeAndCity}
+                  onChange={(e) =>
+                    updateSender("postCodeAndCity", e.target.value)
+                  }
+                  className="flex-1 text-sm"
+                />
+              </div>
             </div>
-
-            {/* Remove Item Button */}
-            <button
-              type="button"
-              onClick={() => handleRemoveItem(index)}
-              className="text-red-500 hover:text-red-700"
-            >
-              Remove Item
-            </button>
           </div>
-        ))}
 
-        {/* Add Item Button */}
-        <button
-          type="button"
-          onClick={handleAddItem}
-          className="text-blue-500 hover:text-blue-700"
-        >
-          Add Item
-        </button>
+          {/* Middle column - Contact Information */}
+          <div>
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <Label htmlFor="email" className="w-20 flex-row-reverse pr-2">
+                  Sähköposti
+                </Label>
+                <Input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value={invoice.sender.email}
+                  onChange={(e) => updateSender("email", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+
+              <div className="flex items-center">
+                <Label htmlFor="phone" className="w-20 flex-row-reverse pr-2">
+                  Puhelin
+                </Label>
+                <Input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={invoice.sender.phone}
+                  onChange={(e) => updateSender("phone", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+
+              <div className="flex items-center">
+                <Label htmlFor="website" className="w-20 flex-row-reverse pr-2">
+                  Nettisivusto
+                </Label>
+                <Input
+                  type="text"
+                  id="website"
+                  name="website"
+                  value={invoice.sender.website}
+                  onChange={(e) => updateSender("website", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right column - VAT and Domicile Information */}
+          <div>
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <Label htmlFor="bank" className="w-16 flex-row-reverse pr-2">
+                  Pankki
+                </Label>
+                <Input
+                  type="text"
+                  id="bank"
+                  name="bank"
+                  value={invoice.sender.bank}
+                  onChange={(e) => updateSender("bank", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+              <div className="flex items-center">
+                <Label htmlFor="iban" className="w-16 flex-row-reverse pr-2">
+                  IBAN
+                </Label>
+                <Input
+                  type="text"
+                  id="iban"
+                  name="iban"
+                  value={invoice.sender.iban}
+                  onChange={(e) => updateSender("iban", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+
+              <div className="flex items-center">
+                <Label htmlFor="bic" className="w-16 flex-row-reverse pr-2">
+                  BIC
+                </Label>
+                <Input
+                  type="text"
+                  id="bic"
+                  name="bic"
+                  value={invoice.sender.bic}
+                  onChange={(e) => updateSender("bic", e.target.value)}
+                  className="flex-1 text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* SECTION: Submit Button */}
-      <button
-        type="submit"
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-      >
-        Preview PDF
-      </button>
     </form>
   );
 }

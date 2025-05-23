@@ -45,7 +45,6 @@ export default function InvoicePage() {
   return (
     <section className="py-8 px-4 container mx-auto">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-8">Luo lasku</h2>
         <div>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <InvoiceForm onSubmit={handleFormSubmit} />

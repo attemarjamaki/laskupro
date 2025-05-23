@@ -15,8 +15,10 @@ export interface Invoice {
     buisnessId: string;
     email: string;
     phone: string;
+    website: string;
     iban: string;
     bic: string;
+    bank: string;
   };
   recipient: {
     name: string;

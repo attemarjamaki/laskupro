@@ -4,6 +4,7 @@ import { InvoiceItem } from "@/types/invoice";
 
 const styles = StyleSheet.create({
   page: {
+    position: "relative",
     backgroundColor: "white",
     padding: 16,
     fontSize: 8,
@@ -73,6 +74,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   footer: {
+    position: "absolute",
+    bottom: 40,
+    left: 40,
+    right: 40,
     borderTopWidth: 1,
     borderTopColor: "#D1D5DB",
     paddingTop: 16,
@@ -230,14 +235,14 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
               <Text>Veroton hinta</Text>
               <Text>{formatCurrency(totalTaxExcl)}</Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View style={[styles.summaryRow, { marginBottom: 2 }]}>
               <Text>Arvonlisävero</Text>
               <Text>{formatCurrency(totalTax)}</Text>
             </View>
             <View
               style={[
                 styles.summaryRow,
-                { borderTopWidth: 1, borderTopColor: "#D1D5DB", paddingTop: 8 },
+                { borderTopWidth: 1, borderTopColor: "#D1D5DB" },
               ]}
             >
               <Text>Yhteensä:</Text>
@@ -246,35 +251,31 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
           </View>
 
           {/* Footer Section */}
-          <View style={[styles.footer, { marginTop: 40 }]}>
+          <View style={styles.footer}>
             <View>
               <Text style={[styles.textBold, { marginBottom: 8 }]}>
                 Yritystiedot
               </Text>
               <Text>{invoice.sender.name}</Text>
-              <Text>Y-tunnus: 696969-7</Text>
-              <Text>kallentie 69</Text>
-              <Text>00400 Hele</Text>
+              <Text>{invoice.sender.buisnessId}</Text>
+              <Text>{invoice.sender.address}</Text>
+              <Text>{invoice.sender.postCodeAndCity}</Text>
             </View>
             <View>
               <Text style={[styles.textBold, { marginBottom: 8 }]}>
                 Yhteystiedot
               </Text>
-              <Text>Puh: 045698732</Text>
-              <Text>kallepelle@gmail.com</Text>
+              <Text>{invoice.sender.email}</Text>
+              <Text>{invoice.sender.phone}</Text>
+              <Text>{invoice.sender.website}</Text>
             </View>
             <View>
               <Text style={[styles.textBold, { marginBottom: 8 }]}>
                 Maksutiedot
               </Text>
-              <Text>IBAN: FI00 0000 0000 0000 00</Text>
-              <Text>BIC: HODLFL</Text>
-              <Text>Viitenumero: RF15 4206 9000</Text>
-              <Text>
-                Eräpäivä:{" "}
-                {new Date(invoice.details.dueDate).toLocaleDateString("fi-FI")}
-              </Text>
-              <Text>Viivästyskorko: {invoice.details.interestRate}%</Text>
+              <Text>{invoice.sender.bank}</Text>
+              <Text>{invoice.sender.iban}</Text>
+              <Text>{invoice.sender.bic}</Text>
             </View>
           </View>
         </View>
