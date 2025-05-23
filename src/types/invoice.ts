@@ -10,6 +10,13 @@ export interface InvoiceItem {
 export interface Invoice {
   sender: {
     name: string;
+    address: string;
+    postCodeAndCity: string;
+    buisnessId: string;
+    email: string;
+    phone: string;
+    iban: string;
+    bic: string;
   };
   recipient: {
     name: string;

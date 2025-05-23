@@ -16,7 +16,16 @@ export default function InvoiceForm({
   // SECTION: State Management
   // Initialize form state with default values matching the Invoice type
   const [invoice, setInvoice] = useState<Invoice>({
-    sender: { name: "" },
+    sender: {
+      name: "",
+      address: "",
+      postCodeAndCity: "",
+      buisnessId: "",
+      email: "",
+      phone: "",
+      iban: "",
+      bic: "",
+    },
     recipient: {
       name: "",
       contactPerson: "",
@@ -70,8 +79,19 @@ export default function InvoiceForm({
     }));
   };
 
-  // Update Details (Laskun tiedot) information (invoicenumber, date, dueDate, reference, interestRate)
-  const updateDetails = (field: any, value: any) => {
+  // Update Sender Details fields (Laskuttaja)
+  const updateSender = (field: any, value: string) => {
+    setInvoice({
+      ...invoice,
+      sender: {
+        ...invoice.sender,
+        [field]: value,
+      },
+    });
+  };
+
+  // Update Details fields (Laskun tiedot)
+  const updateDetails = (field: any, value: string | number) => {
     setInvoice({
       ...invoice,
       details: {
@@ -81,8 +101,8 @@ export default function InvoiceForm({
     });
   };
 
-  // Update Recipient (Vastaanottajan tiedot) information (name, contactPerson, address, postCodeAndCity)
-  const updateRecipient = (field: any, value: any) => {
+  // Update Recipient fields (Vastaanottajan tiedot)
+  const updateRecipient = (field: any, value: string) => {
     setInvoice({
       ...invoice,
       recipient: {
@@ -92,7 +112,7 @@ export default function InvoiceForm({
     });
   };
 
-  // Update item fields (description, quantity, price, taxRate, taxIncluded)
+  // Update item fields (Selite, Määrä, Hinta...)
   const handleItemChange = (
     index: number,
     field: keyof InvoiceItem,
@@ -194,21 +214,28 @@ export default function InvoiceForm({
                 type="text"
                 id="name"
                 name="name"
+                value={invoice.recipient.name}
+                onChange={(e) => updateRecipient("name", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
 
             <div className="flex items-center">
               <Label
-                htmlFor="contactPerson"
+                htmlFor="contact-person"
                 className="w-48 flex-row-reverse pr-2"
               >
                 Yhteyshenkilö
               </Label>
               <Input
                 type="text"
-                id="contactPerson"
-                name="contactPerson"
+                id="contact-person"
+                name="contact-person"
+                value={invoice.recipient.contactPerson}
+                onChange={(e) =>
+                  updateRecipient("contactPerson", e.target.value)
+                }
                 className="flex-1 text-sm"
               />
             </div>
@@ -221,22 +248,30 @@ export default function InvoiceForm({
                 type="text"
                 id="address"
                 name="address"
+                value={invoice.recipient.address}
+                onChange={(e) => updateRecipient("address", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
 
             <div className="flex items-center">
               <Label
-                htmlFor="postalCode"
+                htmlFor="post-code-and-city"
                 className="w-48 flex-row-reverse pr-2 text-sm"
               >
                 Postinumero ja -toimipaikka
               </Label>
               <Input
                 type="text"
-                id="postalCode"
-                name="postalCode"
+                id="post-code-and-city"
+                name="post-code-and-city"
+                value={invoice.recipient.postCodeAndCity}
+                onChange={(e) =>
+                  updateRecipient("postCodeAndCity", e.target.value)
+                }
                 className="flex-1 text-sm"
+                required
               />
             </div>
           </div>
@@ -260,6 +295,7 @@ export default function InvoiceForm({
                 value={invoice.details.invoiceNumber}
                 onChange={(e) => updateDetails("invoiceNumber", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
 
@@ -277,6 +313,7 @@ export default function InvoiceForm({
                 value={invoice.details.date}
                 onChange={(e) => updateDetails("date", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
 
@@ -294,6 +331,7 @@ export default function InvoiceForm({
                 value={invoice.details.dueDate}
                 onChange={(e) => updateDetails("dueDate", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
 
@@ -311,6 +349,7 @@ export default function InvoiceForm({
                 value={invoice.details.interestRate}
                 onChange={(e) => updateDetails("interestRate", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
             <div className="flex items-center">
@@ -327,6 +366,7 @@ export default function InvoiceForm({
                 value={invoice.details.reference}
                 onChange={(e) => updateDetails("reference", e.target.value)}
                 className="flex-1 text-sm"
+                required
               />
             </div>
           </div>
