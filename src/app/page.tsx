@@ -1,3 +1,4 @@
+import { BasicCta } from "@/components/sections/cta";
 import { AccordionFaq } from "@/components/sections/faq";
 import { GridCards } from "@/components/sections/grid-cards";
 import { HeroSectionOne } from "@/components/sections/hero";
@@ -11,6 +12,7 @@ export default function Home() {
         <GridCards />
         <TextImg />
         <AccordionFaq />
+        <BasicCta />
       </main>
     </div>
   );

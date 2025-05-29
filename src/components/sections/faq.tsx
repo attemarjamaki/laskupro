@@ -14,23 +14,34 @@ export function AccordionFaq() {
         </h2>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger>Is it accessible?</AccordionTrigger>
+            <AccordionTrigger>Onko LaskuPro ilmainen?</AccordionTrigger>
             <AccordionContent>
-              Yes. It adheres to the WAI-ARIA design pattern.
+              Kyllä, Laskupro on täysin maksuton käyttää. Ei piilomaksuja tai
+              rajoituksia.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger>Is it styled?</AccordionTrigger>
+            <AccordionTrigger>Tallennetaanko tietojani?</AccordionTrigger>
             <AccordionContent>
-              Yes. It comes with default styles that matches the other
-              components&apos; aesthetic.
+              Ei - LaskuPro ei tallenna syöttämiäsi tietoja. Kaikki tiedot
+              käsitellään paikallisesti selaimessasi.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
-            <AccordionTrigger>Is it animated?</AccordionTrigger>
+            <AccordionTrigger>Minkälaisia laskuja voin tehdä?</AccordionTrigger>
             <AccordionContent>
-              Yes. It's animated by default, but you can disable it if you
-              prefer.
+              Voit luoda tavallisia myyntilaskuja suomalaisille asiakkaille.
+              Lasku sisältää kaikki tarvittavat tiedot ja on ALV-säännösten
+              mukainen.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-4">
+            <AccordionTrigger>
+              Toimiiko palvelu mobiililaitteilla?
+            </AccordionTrigger>
+            <AccordionContent>
+              Kyllä! Laskupro toimii sujuvasti sekä tietokoneella että
+              mobiililaitteilla.
             </AccordionContent>
           </AccordionItem>
         </Accordion>
