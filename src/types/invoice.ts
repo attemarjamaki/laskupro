@@ -32,6 +32,7 @@ export interface Invoice {
     dueDate: string;
     reference: string;
     interestRate: number;
+    message: string;
   };
   items: InvoiceItem[];
 }

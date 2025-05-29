@@ -38,9 +38,15 @@ const styles = StyleSheet.create({
     marginTop: 28,
     fontSize: 10,
   },
+  message: {
+    marginBottom: 28,
+    gap: 2,
+    marginTop: 8,
+    fontSize: 10,
+  },
   table: {
     width: "100%",
-    marginBottom: 32,
+    marginBottom: 20,
   },
   tableRow: {
     flexDirection: "row",
@@ -63,14 +69,13 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   summary: {
-    width: 200,
+    width: 160,
     alignSelf: "flex-end",
   },
   summaryRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 4,
-    fontSize: 10,
     fontWeight: "bold",
   },
   footer: {
@@ -81,6 +86,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#D1D5DB",
     paddingTop: 16,
+  },
+  companyDetails: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -129,8 +136,9 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
 
   const formatCurrency = (amount: any) => {
     return new Intl.NumberFormat("fi-FI", {
-      style: "currency",
-      currency: "EUR",
+      style: "decimal",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
@@ -196,6 +204,12 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
             </View>
           </View>
 
+          {/* Message Section */}
+
+          <View style={styles.message}>
+            <Text>{invoice.details.message}</Text>
+          </View>
+
           {/* Table Section */}
           <View style={styles.table}>
             <View style={[styles.tableRow, styles.tableHeader]}>
@@ -252,30 +266,26 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
 
           {/* Footer Section */}
           <View style={styles.footer}>
-            <View>
-              <Text style={[styles.textBold, { marginBottom: 8 }]}>
-                Yritystiedot
-              </Text>
-              <Text>{invoice.sender.name}</Text>
-              <Text>{invoice.sender.buisnessId}</Text>
-              <Text>{invoice.sender.address}</Text>
-              <Text>{invoice.sender.postCodeAndCity}</Text>
-            </View>
-            <View>
-              <Text style={[styles.textBold, { marginBottom: 8 }]}>
-                Yhteystiedot
-              </Text>
-              <Text>{invoice.sender.email}</Text>
-              <Text>{invoice.sender.phone}</Text>
-              <Text>{invoice.sender.website}</Text>
-            </View>
-            <View>
-              <Text style={[styles.textBold, { marginBottom: 8 }]}>
-                Maksutiedot
-              </Text>
-              <Text>{invoice.sender.bank}</Text>
-              <Text>{invoice.sender.iban}</Text>
-              <Text>{invoice.sender.bic}</Text>
+            <View style={styles.companyDetails}>
+              <View>
+                <Text>Yritystiedot</Text>
+                <Text>{invoice.sender.name}</Text>
+                <Text>{invoice.sender.buisnessId}</Text>
+                <Text>{invoice.sender.address}</Text>
+                <Text>{invoice.sender.postCodeAndCity}</Text>
+              </View>
+              <View>
+                <Text>Yhteystiedot</Text>
+                <Text>{invoice.sender.email}</Text>
+                <Text>{invoice.sender.phone}</Text>
+                <Text>{invoice.sender.website}</Text>
+              </View>
+              <View>
+                <Text>Maksutiedot</Text>
+                <Text>{invoice.sender.bank}</Text>
+                <Text>{invoice.sender.iban}</Text>
+                <Text>{invoice.sender.bic}</Text>
+              </View>
             </View>
           </View>
         </View>

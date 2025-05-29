@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "./ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
+
 import { Printer, Download, Plus, Trash2 } from "lucide-react";
 
 // SECTION: Component
@@ -51,6 +53,7 @@ export default function InvoiceForm({
         .split("T")[0],
       reference: "",
       interestRate: 8,
+      message: "",
     },
     items: [
       {
@@ -439,6 +442,25 @@ export default function InvoiceForm({
               />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* SECTION: Message (optional) */}
+
+      <div className="pt-4">
+        <div>
+          <Label htmlFor="message" className="mb-2">
+            Laskuviesti
+          </Label>
+          <Textarea
+            id="message"
+            name="message"
+            placeholder="Kirjoita mahdollinen laskuviesti"
+            value={invoice.details.message}
+            onChange={(e) => updateDetails("message", e.target.value)}
+            className="text-sm"
+            required
+          />
         </div>
       </div>
 
