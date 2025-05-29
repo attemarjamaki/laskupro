@@ -18,7 +18,7 @@ export function TextImg() {
             <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
               Miksi käyttää LaskuProa?
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-4 mb-8 md:mb-0">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />

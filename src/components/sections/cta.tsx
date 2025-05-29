@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function BasicCta() {
   return (
@@ -13,7 +14,12 @@ export function BasicCta() {
             ongelmia.
           </p>
           <div className="flex items-center justify-center">
-            <Button size="lg">Luo ensimmäinen laskusi</Button>
+            <Link
+              href="/invoice"
+              className="text-center transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800"
+            >
+              Luo ensimmäinen laskusi
+            </Link>
           </div>
         </div>
       </div>

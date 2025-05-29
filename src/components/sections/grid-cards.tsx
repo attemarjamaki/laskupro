@@ -1,4 +1,4 @@
-import { CheckCircle, FileText, Send, Plus } from "lucide-react";
+import { FileText, Send, Plus } from "lucide-react";
 
 export function GridCards() {
   return (
