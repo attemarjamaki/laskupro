@@ -99,6 +99,57 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 8,
   },
+  detachLine: {
+    borderTopWidth: 1,
+    borderColor: "#999",
+    paddingTop: 8,
+    marginTop: 24,
+    textAlign: "center",
+    borderStyle: "dashed",
+  },
+  paymentSlipContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    padding: 10,
+    marginTop: 8,
+  },
+  slipRow: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  col: {
+    flex: 1,
+  },
+  sectionTitle: {
+    fontWeight: "bold",
+    marginBottom: 6,
+    textTransform: "uppercase",
+    borderBottomWidth: 1,
+    borderColor: "#E5E7EB",
+    paddingBottom: 2,
+  },
+  monoBold: {
+    fontFamily: "Courier",
+    fontWeight: "bold",
+  },
+  amountBox: {},
+  amount: {
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#f5f5f4",
+    padding: 8,
+  },
+  bottomNote: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 20,
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderColor: "#ccc",
+    paddingTop: 6,
+  },
 });
 
 export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
@@ -285,6 +336,65 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
                 <Text>{invoice.sender.bank}</Text>
                 <Text>{invoice.sender.iban}</Text>
                 <Text>{invoice.sender.bic}</Text>
+              </View>
+            </View>
+            <View style={styles.detachLine}></View>
+
+            <View style={styles.paymentSlipContainer}>
+              {/* Top Row - RECIPIENT | PAYER | PAYMENT DETAILS | AMOUNT */}
+              <View style={styles.slipRow}>
+                {/* Recipient */}
+                <View style={styles.col}>
+                  <Text style={styles.sectionTitle}>SAAJA</Text>
+                  <Text>{invoice.sender.name}</Text>
+                  <Text>{invoice.sender.buisnessId}</Text>
+                </View>
+
+                {/* Payer */}
+                <View style={styles.col}>
+                  <Text style={styles.sectionTitle}>MAKSAJA</Text>
+                  <Text>{invoice.recipient.name}</Text>
+                  <Text>{invoice.recipient.address}</Text>
+                  <Text>{invoice.recipient.postCodeAndCity}</Text>
+                </View>
+
+                {/* Payment Details */}
+                <View style={styles.col}>
+                  <Text style={styles.sectionTitle}>MAKSUTIEDOT</Text>
+                  <Text>
+                    Viitenro: <Text>{invoice.details.reference}</Text>
+                  </Text>
+                  <Text>
+                    Eräpäivä: <Text>{invoice.details.dueDate}</Text>
+                  </Text>
+                </View>
+
+                {/* Amount */}
+                <View style={[styles.col, styles.amountBox]}>
+                  <Text style={styles.sectionTitle}>SUMMA</Text>
+                  <Text style={styles.amount}>
+                    {formatCurrency(totalInclTax)} €
+                  </Text>
+                </View>
+              </View>
+
+              {/* second Bottom row */}
+              <View style={{ marginTop: 16, marginBottom: 8 }}>
+                <Text style={{ marginBottom: 2 }}>
+                  IBAN: {invoice.sender.iban}
+                </Text>
+                <Text>BIC: {invoice.sender.bic}</Text>
+              </View>
+
+              {/* Bottom row */}
+              <View style={styles.bottomNote}>
+                <Text style={{ fontSize: 8 }}>
+                  Laskun numero: {invoice.details.invoiceNumber}
+                </Text>
+                <Text>
+                  Luotu:{" "}
+                  {new Date(invoice.details.date).toLocaleDateString("fi-FI")}
+                </Text>
               </View>
             </View>
           </View>

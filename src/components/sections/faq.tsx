@@ -4,12 +4,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Ubuntu } from "next/font/google";
+
+const ubuntu = Ubuntu({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-ubuntu",
+});
 
 export function AccordionFaq() {
   return (
-    <section className="py-8 md:py-16">
+    <section className={`${ubuntu.variable} py-8 md:py-16`}>
       <div className="container px-4 md:px-6 max-w-3xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
+        <h2 className="text-3xl md:text-4xl font-medium font-ubuntu mb-12 text-center">
           Usein kysytyt kysymykset
         </h2>
         <Accordion type="single" collapsible className="w-full">

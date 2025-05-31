@@ -1,5 +1,12 @@
 import Image from "next/image";
 import { CheckCircle } from "lucide-react";
+import { Ubuntu } from "next/font/google";
+
+const ubuntu = Ubuntu({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-ubuntu",
+});
 
 export function TextImg() {
   const benefits = [
@@ -11,11 +18,11 @@ export function TextImg() {
   ];
 
   return (
-    <section className="py-8 md:py-16">
+    <section className={`${ubuntu.variable} py-8 md:py-16`}>
       <div className="container px-4 md:px-6 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center py-8 lg:py-16">
           <div className="w-full md:w-1/2">
-            <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-medium mb-12 text-center font-ubuntu">
               Miksi käyttää LaskuProa?
             </h2>
             <div className="space-y-4 mb-8 md:mb-0">
