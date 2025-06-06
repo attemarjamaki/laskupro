@@ -361,29 +361,19 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
                 {/* Payment Details */}
                 <View style={styles.col}>
                   <Text style={styles.sectionTitle}>MAKSUTIEDOT</Text>
-                  <Text>
-                    Viitenro: <Text>{invoice.details.reference}</Text>
-                  </Text>
-                  <Text>
-                    Eräpäivä: <Text>{invoice.details.dueDate}</Text>
-                  </Text>
-                </View>
-
-                {/* Amount */}
-                <View style={[styles.col, styles.amountBox]}>
-                  <Text style={styles.sectionTitle}>SUMMA</Text>
-                  <Text style={styles.amount}>
-                    {formatCurrency(totalInclTax)} €
-                  </Text>
+                  <Text>IBAN: {invoice.sender.iban}</Text>
+                  <Text>BIC: {invoice.sender.bic}</Text>
+                  <Text>Viitenro: {invoice.details.reference}</Text>
+                  <Text>Eräpäivä: {invoice.details.dueDate}</Text>
                 </View>
               </View>
 
               {/* second Bottom row */}
-              <View style={{ marginTop: 16, marginBottom: 8 }}>
-                <Text style={{ marginBottom: 2 }}>
-                  IBAN: {invoice.sender.iban}
+              <View style={[styles.col, styles.amountBox]}>
+                <Text style={styles.sectionTitle}>SUMMA</Text>
+                <Text style={styles.amount}>
+                  {formatCurrency(totalInclTax)} €
                 </Text>
-                <Text>BIC: {invoice.sender.bic}</Text>
               </View>
 
               {/* Bottom row */}
