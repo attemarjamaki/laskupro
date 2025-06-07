@@ -15,8 +15,14 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import { Plus, Trash2 } from "lucide-react";
+import { Ubuntu } from "next/font/google";
 
-import { Printer, Download, Plus, Trash2 } from "lucide-react";
+const ubuntu = Ubuntu({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-ubuntu",
+});
 
 // SECTION: Component
 export default function InvoiceForm({
@@ -260,10 +266,10 @@ export default function InvoiceForm({
 
   // SECTION: Render
   return (
-    <form onSubmit={handleSubmit} className="mx-auto">
+    <form onSubmit={handleSubmit} className={`${ubuntu.variable} mx-auto`}>
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center">
-          <h2 className="text-2xl font-semibold">Luo lasku</h2>
+          <h2 className="text-2xl font-medium font-ubuntu">Luo lasku</h2>
         </div>
         <div>
           <Button type="submit" variant="default">
@@ -572,6 +578,20 @@ export default function InvoiceForm({
           >
             <Plus className="h-4 w-4 mr-2" /> Lisää rivi
           </Button>
+        </div>
+        <div className="flex flex-col w-full lg:w-96 lg:ml-auto mt-4 space-y-1">
+          <div className="flex justify-between">
+            <p className="font-medium">Veroton summa</p>
+            <span>{formatCurrency(calculateSubtotal())} </span>
+          </div>
+          <div className="flex justify-between">
+            <p className="font-medium">Arvonlisävero</p>
+            <span>{formatCurrency(calculateTaxAmount())} </span>
+          </div>
+          <div className="flex justify-between font-bold">
+            <p>Yhteensä</p>
+            <span>{formatCurrency(calculateTotal())} </span>
+          </div>
         </div>
       </div>
 
