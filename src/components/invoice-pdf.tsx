@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: "absolute",
-    bottom: 40,
-    left: 40,
-    right: 40,
+    bottom: 20,
+    left: 20,
+    right: 20,
     borderTopWidth: 1,
     borderTopColor: "#D1D5DB",
-    paddingTop: 16,
+    paddingTop: 10,
   },
   companyDetails: {
     flexDirection: "row",
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#999",
     paddingTop: 8,
-    marginTop: 24,
+    marginTop: 12,
     textAlign: "center",
     borderStyle: "dashed",
   },
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     backgroundColor: "#f5f5f4",
-    padding: 8,
+    padding: 12,
   },
   bottomNote: {
     display: "flex",
@@ -202,9 +202,9 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
             <View style={styles.column}>
               <Text style={styles.textBold}>{invoice.sender.name}</Text>
               <Text style={styles.smallText}>
-                Sender address 69, 00400 Helsinki
+                {invoice.sender.address}, {invoice.sender.postCodeAndCity}
               </Text>
-              <Text style={styles.smallText}>Y-tunnus: 696969-7</Text>
+              <Text style={styles.smallText}>{invoice.sender.buisnessId}</Text>
 
               {/* Recipient Section */}
               <View style={styles.section}>
@@ -319,20 +319,17 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
           <View style={styles.footer}>
             <View style={styles.companyDetails}>
               <View>
-                <Text>Yritystiedot</Text>
                 <Text>{invoice.sender.name}</Text>
                 <Text>{invoice.sender.buisnessId}</Text>
                 <Text>{invoice.sender.address}</Text>
                 <Text>{invoice.sender.postCodeAndCity}</Text>
               </View>
               <View>
-                <Text>Yhteystiedot</Text>
                 <Text>{invoice.sender.email}</Text>
                 <Text>{invoice.sender.phone}</Text>
                 <Text>{invoice.sender.website}</Text>
               </View>
               <View>
-                <Text>Maksutiedot</Text>
                 <Text>{invoice.sender.bank}</Text>
                 <Text>{invoice.sender.iban}</Text>
                 <Text>{invoice.sender.bic}</Text>
@@ -346,33 +343,80 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
                 {/* Recipient */}
                 <View style={styles.col}>
                   <Text style={styles.sectionTitle}>SAAJA</Text>
-                  <Text>{invoice.sender.name}</Text>
-                  <Text>{invoice.sender.buisnessId}</Text>
+                  <Text style={{ marginBottom: 2 }}>{invoice.sender.name}</Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    {invoice.sender.buisnessId}
+                  </Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    {invoice.sender.address}
+                  </Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    {invoice.sender.postCodeAndCity}
+                  </Text>
                 </View>
 
                 {/* Payer */}
                 <View style={styles.col}>
                   <Text style={styles.sectionTitle}>MAKSAJA</Text>
-                  <Text>{invoice.recipient.name}</Text>
-                  <Text>{invoice.recipient.address}</Text>
-                  <Text>{invoice.recipient.postCodeAndCity}</Text>
+
+                  <Text style={{ marginBottom: 2 }}>
+                    {invoice.recipient.name}
+                  </Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    {invoice.recipient.address}
+                  </Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    {invoice.recipient.postCodeAndCity}
+                  </Text>
                 </View>
 
                 {/* Payment Details */}
                 <View style={styles.col}>
                   <Text style={styles.sectionTitle}>MAKSUTIEDOT</Text>
-                  <Text>IBAN: {invoice.sender.iban}</Text>
-                  <Text>BIC: {invoice.sender.bic}</Text>
-                  <Text>Viitenro: {invoice.details.reference}</Text>
-                  <Text>Eräpäivä: {invoice.details.dueDate}</Text>
+                  <Text style={{ marginBottom: 2 }}>
+                    Viitenro: {invoice.details.reference}
+                  </Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    Eräpäivä: {invoice.details.dueDate}
+                  </Text>
+                  <Text style={{ marginVertical: 2 }}>
+                    Viitekorko: {invoice.details.interestRate} %
+                  </Text>
+                </View>
+
+                <View style={[styles.col, styles.amountBox]}>
+                  <Text style={styles.sectionTitle}>SUMMA</Text>
+                  <Text style={styles.amount}>
+                    {formatCurrency(totalInclTax)} €
+                  </Text>
                 </View>
               </View>
 
               {/* second Bottom row */}
-              <View style={[styles.col, styles.amountBox]}>
-                <Text style={styles.sectionTitle}>SUMMA</Text>
-                <Text style={styles.amount}>
-                  {formatCurrency(totalInclTax)} €
+              <View style={{ marginTop: 16, marginBottom: 8 }}>
+                <Text>
+                  IBAN:{" "}
+                  <Text
+                    style={{
+                      fontFamily: "Courier",
+                      fontSize: 10,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    {invoice.sender.iban}
+                  </Text>{" "}
+                </Text>
+                <Text>
+                  BIC:{" "}
+                  <Text
+                    style={{
+                      fontFamily: "Courier",
+                      fontSize: 10,
+                      fontWeight: "medium",
+                    }}
+                  >
+                    {invoice.sender.bic}
+                  </Text>{" "}
                 </Text>
               </View>
 
