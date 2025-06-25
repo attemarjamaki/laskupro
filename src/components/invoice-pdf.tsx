@@ -209,6 +209,7 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
               {/* Recipient Section */}
               <View style={styles.section}>
                 <Text>{invoice.recipient.name}</Text>
+                <Text>{invoice.recipient.contactPerson}</Text>
                 <Text>{invoice.recipient.address}</Text>
                 <Text>{invoice.recipient.postCodeAndCity}</Text>
               </View>
@@ -310,7 +311,7 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
                 { borderTopWidth: 1, borderTopColor: "#D1D5DB" },
               ]}
             >
-              <Text>Yhteensä:</Text>
+              <Text>Yhteensä</Text>
               <Text>{formatCurrency(totalInclTax)}</Text>
             </View>
           </View>

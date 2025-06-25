@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LaskuPro",
-  description: "Ilmainen laskutusohjelma",
+  title: "LaskuPro - Ilmainen laskutusohjelma",
+  description:
+    "Ilmainen laskutusohjelma - Nopea ja helppokäyttöinen laskujen luonti suomalaisille yrittäjille. Ei rekisteröitymistä, ei maksuja",
 };
 
 export default function RootLayout({

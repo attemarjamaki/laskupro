@@ -23,7 +23,7 @@ export function TextImg() {
         <div className="flex flex-col md:flex-row items-center py-8 lg:py-16">
           <div className="w-full md:w-1/2">
             <h2 className="text-3xl md:text-4xl font-medium mb-12 text-center font-ubuntu">
-              Miksi käyttää LaskuProa?
+              Miksi käyttää LaskuProta?
             </h2>
             <div className="space-y-4 mb-8 md:mb-0">
               {benefits.map((benefit, index) => (

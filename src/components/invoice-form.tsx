@@ -444,7 +444,6 @@ export default function InvoiceForm({
                 value={invoice.details.reference}
                 onChange={(e) => updateDetails("reference", e.target.value)}
                 className="flex-1 text-sm"
-                required
               />
             </div>
           </div>
@@ -465,7 +464,6 @@ export default function InvoiceForm({
             value={invoice.details.message}
             onChange={(e) => updateDetails("message", e.target.value)}
             className="text-sm"
-            required
           />
         </div>
       </div>
@@ -486,6 +484,7 @@ export default function InvoiceForm({
                     handleItemChange(index, "description", e.target.value)
                   }
                   className="h-8"
+                  required
                 />
               </div>
               <div className="col-span-2 md:col-span-1 space-y-2">
@@ -499,6 +498,7 @@ export default function InvoiceForm({
                     handleItemChange(index, "quantity", e.target.value)
                   }
                   className="h-8"
+                  required
                 />
               </div>
               <div className="col-span-4 md:col-span-2 space-y-2">
@@ -513,6 +513,7 @@ export default function InvoiceForm({
                     handleItemChange(index, "price", parseFloat(e.target.value))
                   }
                   className="h-8"
+                  required
                 />
               </div>
 
@@ -616,6 +617,7 @@ export default function InvoiceForm({
                   value={invoice.sender.name}
                   onChange={(e) => updateSender("name", e.target.value)}
                   className="flex-1 text-sm"
+                  required
                 />
               </div>
 
@@ -633,6 +635,7 @@ export default function InvoiceForm({
                   value={invoice.sender.buisnessId}
                   onChange={(e) => updateSender("buisnessId", e.target.value)}
                   className="flex-1 text-sm"
+                  required
                 />
               </div>
 
@@ -650,6 +653,7 @@ export default function InvoiceForm({
                   value={invoice.sender.address}
                   onChange={(e) => updateSender("address", e.target.value)}
                   className="flex-1 text-sm"
+                  required
                 />
               </div>
 
@@ -669,6 +673,7 @@ export default function InvoiceForm({
                     updateSender("postCodeAndCity", e.target.value)
                   }
                   className="flex-1 text-sm"
+                  required
                 />
               </div>
             </div>
@@ -748,6 +753,7 @@ export default function InvoiceForm({
                   value={invoice.sender.iban}
                   onChange={(e) => updateSender("iban", e.target.value)}
                   className="flex-1 text-sm"
+                  required
                 />
               </div>
 
@@ -762,6 +768,7 @@ export default function InvoiceForm({
                   value={invoice.sender.bic}
                   onChange={(e) => updateSender("bic", e.target.value)}
                   className="flex-1 text-sm"
+                  required
                 />
               </div>
             </div>
