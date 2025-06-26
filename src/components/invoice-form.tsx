@@ -89,8 +89,7 @@ export default function InvoiceForm({
   // SECTION: Handler Functions
 
   // Update Sender Details fields (Laskuttaja)
-  //@ts-ignore
-  const updateSender = (field: any, value: string) => {
+  const updateSender = (field: string, value: string) => {
     setInvoice({
       ...invoice,
       sender: {
@@ -101,8 +100,7 @@ export default function InvoiceForm({
   };
 
   // Update Details fields (Laskun tiedot)
-  //@ts-ignore
-  const updateDetails = (field: any, value: string | number) => {
+  const updateDetails = (field: string, value: string | number) => {
     setInvoice({
       ...invoice,
       details: {
@@ -113,8 +111,7 @@ export default function InvoiceForm({
   };
 
   // Update Recipient fields (Vastaanottajan tiedot)
-  //@ts-ignore
-  const updateRecipient = (field: any, value: string) => {
+  const updateRecipient = (field: string, value: string) => {
     setInvoice({
       ...invoice,
       recipient: {
@@ -169,8 +166,8 @@ export default function InvoiceForm({
   };
 
   // Helper function calculations
-  //@ts-ignore
-  const calculateItemNetPrice = (item: any) => {
+
+  const calculateItemNetPrice = (item: InvoiceItem) => {
     if (item.taxIncluded) {
       // If tax is included, we need to extract it
       return (item.price * item.quantity) / (1 + item.taxRate / 100);
@@ -178,8 +175,7 @@ export default function InvoiceForm({
     return item.price * item.quantity;
   };
 
-  //@ts-ignore
-  const calculateItemTaxAmount = (item: any) => {
+  const calculateItemTaxAmount = (item: InvoiceItem) => {
     if (item.taxIncluded) {
       // If tax is included, calculate the tax portion
       const netAmount = calculateItemNetPrice(item);
@@ -190,8 +186,7 @@ export default function InvoiceForm({
     }
   };
 
-  //@ts-ignore
-  const calculateItemTotalPrice = (item: any) => {
+  const calculateItemTotalPrice = (item: InvoiceItem) => {
     if (item.taxIncluded) {
       // If tax is included, the total is simply price * quantity
       return item.price * item.quantity;

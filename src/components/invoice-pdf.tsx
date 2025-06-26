@@ -185,6 +185,7 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
     .reduce((sum, item) => sum + calculateItemTotalPrice(item), 0)
     .toFixed(2);
 
+  //@ts-ignore
   const formatCurrency = (amount: any) => {
     return new Intl.NumberFormat("fi-FI", {
       style: "decimal",
