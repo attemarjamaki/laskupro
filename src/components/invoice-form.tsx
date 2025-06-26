@@ -254,7 +254,7 @@ export default function InvoiceForm({
 
     // If there are errors, stop submission
     if (
-      //@ts-expect-error
+      //@ts-expect-error TypeScript cannot infer the type of `newErrors.items` due to dynamic structure
       newErrors.items.some((item) => Object.keys(item).length > 0)
     ) {
       return;
