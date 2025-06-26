@@ -185,7 +185,7 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
     .reduce((sum, item) => sum + calculateItemTotalPrice(item), 0)
     .toFixed(2);
 
-  //@ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatCurrency = (amount: any) => {
     return new Intl.NumberFormat("fi-FI", {
       style: "decimal",

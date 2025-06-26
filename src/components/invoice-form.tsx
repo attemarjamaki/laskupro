@@ -217,6 +217,7 @@ export default function InvoiceForm({
     );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formatCurrency = (amount: any) => {
     return new Intl.NumberFormat("fi-FI", {
       style: "currency",
@@ -253,7 +254,7 @@ export default function InvoiceForm({
 
     // If there are errors, stop submission
     if (
-      //@ts-ignore-error
+      //@ts-expect-error
       newErrors.items.some((item) => Object.keys(item).length > 0)
     ) {
       return;
