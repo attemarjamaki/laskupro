@@ -43,7 +43,7 @@ export function GridCards() {
                 2. Luo PDF-lasku
               </h3>
               <p className="mt-4 text-center">
-                Klikkaa "Esikatsele PDF" ja saat heti valmiin PDF:n.
+                Klikkaa &quot;Esikatsele PDF&quot; ja saat heti valmiin PDF:n.
               </p>
             </div>
           </div>

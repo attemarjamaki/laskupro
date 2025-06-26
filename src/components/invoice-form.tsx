@@ -89,6 +89,7 @@ export default function InvoiceForm({
   // SECTION: Handler Functions
 
   // Update Sender Details fields (Laskuttaja)
+  //@ts-ignore
   const updateSender = (field: any, value: string) => {
     setInvoice({
       ...invoice,
@@ -100,6 +101,7 @@ export default function InvoiceForm({
   };
 
   // Update Details fields (Laskun tiedot)
+  //@ts-ignore
   const updateDetails = (field: any, value: string | number) => {
     setInvoice({
       ...invoice,
@@ -111,6 +113,7 @@ export default function InvoiceForm({
   };
 
   // Update Recipient fields (Vastaanottajan tiedot)
+  //@ts-ignore
   const updateRecipient = (field: any, value: string) => {
     setInvoice({
       ...invoice,
@@ -166,6 +169,7 @@ export default function InvoiceForm({
   };
 
   // Helper function calculations
+  //@ts-ignore
   const calculateItemNetPrice = (item: any) => {
     if (item.taxIncluded) {
       // If tax is included, we need to extract it
@@ -174,6 +178,7 @@ export default function InvoiceForm({
     return item.price * item.quantity;
   };
 
+  //@ts-ignore
   const calculateItemTaxAmount = (item: any) => {
     if (item.taxIncluded) {
       // If tax is included, calculate the tax portion
@@ -185,6 +190,7 @@ export default function InvoiceForm({
     }
   };
 
+  //@ts-ignore
   const calculateItemTotalPrice = (item: any) => {
     if (item.taxIncluded) {
       // If tax is included, the total is simply price * quantity
@@ -229,13 +235,10 @@ export default function InvoiceForm({
 
     // Basic validation
     const newErrors: typeof errors = { items: [] };
-    /*
+
     if (!invoice.sender.name) newErrors.senderName = "Sender name is required";
     if (!invoice.recipient.name)
       newErrors.recipientName = "Recipient name is required";
-    if (!invoice.details.invoiceNumber)
-      newErrors.invoiceNumber = "Invoice number is required";
-    */
 
     invoice.items.forEach((item, index) => {
       const itemErrors: {
@@ -255,7 +258,7 @@ export default function InvoiceForm({
 
     // If there are errors, stop submission
     if (
-      //@ts-ignore
+      //@ts-ignore-error
       newErrors.items.some((item) => Object.keys(item).length > 0)
     ) {
       return;

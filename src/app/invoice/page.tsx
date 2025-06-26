@@ -36,6 +36,7 @@ export default function InvoicePage() {
         URL.revokeObjectURL(pdfUrl);
         console.log("Blob URL revoked");
       }, 1000);
+      //@ts-ignore
     } catch (error: any) {
       console.error("Error:", error);
       setError(error.message || "Failed to generate PDF");
