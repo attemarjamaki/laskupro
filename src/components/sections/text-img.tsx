@@ -40,7 +40,7 @@ export function TextImg() {
               width={400}
               height={400}
               alt="desk"
-              className=" rounded-3xl object-cover w-full md:w-[360px] aspect-square"
+              className="rounded-3xl object-cover w-full md:w-[360px] aspect-square shadow-lg"
               priority
             />
           </div>

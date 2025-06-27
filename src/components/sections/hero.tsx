@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import Link from "next/link";
 import { Ubuntu } from "next/font/google";
+import Image from "next/image";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -85,7 +86,7 @@ export function HeroSectionOne() {
           className="relative z-10 mt-20 rounded-3xl border border-neutral-200 bg-neutral-100 p-4 shadow-md"
         >
           <div className="w-full overflow-hidden rounded-xl border border-gray-300 dark:border-gray-700">
-            <img
+            <Image
               src="/images/laskupro-lasku.png"
               alt="Landing page preview"
               className="aspect-[16/9] h-auto w-full object-cover"
