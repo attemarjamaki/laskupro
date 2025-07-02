@@ -491,7 +491,8 @@ export default function InvoiceForm({
                 <Input
                   id={`item-quantity-${index}`}
                   type="number"
-                  min="1"
+                  min="0"
+                  step="0.1"
                   value={item.quantity}
                   onChange={(e) =>
                     handleItemChange(index, "quantity", e.target.value)
