@@ -11,18 +11,12 @@ export default function InvoicePage() {
 
   const handleFormSubmit = async (data: Invoice) => {
     try {
-      console.log("Form data:", data);
-
-      // Store invoice data in sessionStorage (or localStorage)
       sessionStorage.setItem("invoiceData", JSON.stringify(data));
-
-      // Open the PDF preview in a new tab
-      window.open("/invoice/preview", "_blank");
+      window.open("/invoice/pdf", "_blank");
 
       setError(null);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error("Error:", error);
       setError(error.message || "Failed to process invoice");
     }
   };

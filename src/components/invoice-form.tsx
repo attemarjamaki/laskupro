@@ -263,7 +263,6 @@ export default function InvoiceForm({
     onSubmit(invoice);
   };
 
-  // SECTION: Render
   return (
     <form onSubmit={handleSubmit} className={`${ubuntu.variable} mx-auto`}>
       <div className="flex items-center justify-between mb-8">
