@@ -24,14 +24,11 @@ const ubuntu = Ubuntu({
   variable: "--font-ubuntu",
 });
 
-// SECTION: Component
 export default function InvoiceForm({
   onSubmit,
 }: {
   onSubmit: (data: Invoice) => void;
 }) {
-  // SECTION: State Management
-  // Initialize form state with default values matching the Invoice type
   const [invoice, setInvoice] = useState<Invoice>({
     sender: {
       name: "",
@@ -73,7 +70,6 @@ export default function InvoiceForm({
     ],
   });
 
-  // State for tracking validation errors
   const [errors, setErrors] = useState<{
     senderName?: string;
     recipientName?: string;
@@ -86,9 +82,7 @@ export default function InvoiceForm({
     }[];
   }>({});
 
-  // SECTION: Handler Functions
-
-  // Update Sender Details fields (Laskuttaja)
+  // (Laskuttaja)
   const updateSender = (field: string, value: string) => {
     setInvoice({
       ...invoice,
@@ -99,7 +93,7 @@ export default function InvoiceForm({
     });
   };
 
-  // Update Details fields (Laskun tiedot)
+  // (Laskun tiedot)
   const updateDetails = (field: string, value: string | number) => {
     setInvoice({
       ...invoice,
@@ -110,7 +104,7 @@ export default function InvoiceForm({
     });
   };
 
-  // Update Recipient fields (Vastaanottajan tiedot)
+  // (Vastaanottajan tiedot)
   const updateRecipient = (field: string, value: string) => {
     setInvoice({
       ...invoice,
@@ -156,8 +150,6 @@ export default function InvoiceForm({
     }));
   };
 
-  // Remove an item by index
-  // this also
   const handleRemoveItem = (index: number) => {
     setInvoice((prev) => ({
       ...prev,
@@ -165,11 +157,8 @@ export default function InvoiceForm({
     }));
   };
 
-  // Helper function calculations
-
   const calculateItemNetPrice = (item: InvoiceItem) => {
     if (item.taxIncluded) {
-      // If tax is included, we need to extract it
       return (item.price * item.quantity) / (1 + item.taxRate / 100);
     }
     return item.price * item.quantity;
@@ -177,21 +166,17 @@ export default function InvoiceForm({
 
   const calculateItemTaxAmount = (item: InvoiceItem) => {
     if (item.taxIncluded) {
-      // If tax is included, calculate the tax portion
       const netAmount = calculateItemNetPrice(item);
       return item.price * item.quantity - netAmount;
     } else {
-      // If tax is not included, calculate the tax to be added
       return (item.price * item.quantity * item.taxRate) / 100;
     }
   };
 
   const calculateItemTotalPrice = (item: InvoiceItem) => {
     if (item.taxIncluded) {
-      // If tax is included, the total is simply price * quantity
       return item.price * item.quantity;
     } else {
-      // If tax is not included, add the tax to the price * quantity
       return item.price * item.quantity + calculateItemTaxAmount(item);
     }
   };
@@ -225,13 +210,10 @@ export default function InvoiceForm({
     }).format(amount);
   };
 
-  // SECTION: Form Submission
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
     const newErrors: typeof errors = { items: [] };
-
     if (!invoice.sender.name) newErrors.senderName = "Sender name is required";
     if (!invoice.recipient.name)
       newErrors.recipientName = "Recipient name is required";
@@ -252,14 +234,12 @@ export default function InvoiceForm({
 
     setErrors(newErrors);
 
-    // If there are errors, stop submission
     if (
       //@ts-expect-error TypeScript cannot infer the type of `newErrors.items` due to dynamic structure
       newErrors.items.some((item) => Object.keys(item).length > 0)
     ) {
       return;
     }
-    // Submit valid data
     onSubmit(invoice);
   };
 

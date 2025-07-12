@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
 });
 
 export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
-  // Calculate totals
   const calculateItemTaxAmount = (item: InvoiceItem) => {
     const price = item.taxIncluded
       ? item.price / (1 + item.taxRate / 100)
@@ -258,7 +257,6 @@ export default function InvoicePDF({ invoice }: { invoice: Invoice }) {
           </View>
 
           {/* Message Section */}
-
           <View style={styles.message}>
             <Text>{invoice.details.message}</Text>
           </View>
