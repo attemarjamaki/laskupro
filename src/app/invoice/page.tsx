@@ -11,10 +11,12 @@ export const metadata: Metadata = {
 
 export default function InvoicePage() {
   return (
-    <main>
+    <>
       <Header />
-      <InvoiceSubmit />
+      <main>
+        <InvoiceSubmit />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
