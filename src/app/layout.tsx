@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Laskupro - Ilmainen Laskutusohjelma",
+    default: "Laskupro - Ilmainen laskutusohjelma",
     template: "%s - Laskupro",
   },
   description:

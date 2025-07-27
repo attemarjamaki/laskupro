@@ -245,14 +245,9 @@ export default function InvoiceForm({
 
   return (
     <form onSubmit={handleSubmit} className={`${ubuntu.variable} mx-auto`}>
-      <div className="flex items-center justify-between mb-8">
+      <div className="mb-8">
         <div className="flex items-center">
           <h2 className="text-2xl font-medium font-ubuntu">Luo lasku</h2>
-        </div>
-        <div>
-          <Button type="submit" variant="default">
-            Esikatsele PDF
-          </Button>
         </div>
       </div>
 
@@ -753,6 +748,11 @@ export default function InvoiceForm({
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex items-center justify-center mt-12">
+        <Button type="submit" variant="default" className="px-10">
+          Esikatsele PDF
+        </Button>
       </div>
     </form>
   );
