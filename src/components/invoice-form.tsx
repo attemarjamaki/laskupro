@@ -118,7 +118,7 @@ export default function InvoiceForm({
   const handleItemChange = (
     index: number,
     field: keyof InvoiceItem,
-    value: string | number | boolean
+    value: string | number | boolean,
   ) => {
     setInvoice((prev) => {
       const newItems = [...prev.items];
@@ -184,21 +184,21 @@ export default function InvoiceForm({
   const calculateSubtotal = () => {
     return invoice.items.reduce(
       (sum, item) => sum + calculateItemNetPrice(item),
-      0
+      0,
     );
   };
 
   const calculateTaxAmount = () => {
     return invoice.items.reduce(
       (sum, item) => sum + calculateItemTaxAmount(item),
-      0
+      0,
     );
   };
 
   const calculateTotal = () => {
     return invoice.items.reduce(
       (sum, item) => sum + calculateItemTotalPrice(item),
-      0
+      0,
     );
   };
 
@@ -302,7 +302,6 @@ export default function InvoiceForm({
                 value={invoice.recipient.address}
                 onChange={(e) => updateRecipient("address", e.target.value)}
                 className="flex-1 text-sm"
-                required
               />
             </div>
 
@@ -322,7 +321,6 @@ export default function InvoiceForm({
                   updateRecipient("postCodeAndCity", e.target.value)
                 }
                 className="flex-1 text-sm"
-                required
               />
             </div>
           </div>
@@ -508,6 +506,7 @@ export default function InvoiceForm({
                   <SelectContent>
                     <SelectItem value="0">0%</SelectItem>
                     <SelectItem value="10">10%</SelectItem>
+                    <SelectItem value="13.5">13,5%</SelectItem>
                     <SelectItem value="14">14%</SelectItem>
                     <SelectItem value="24">24%</SelectItem>
                     <SelectItem value="25.5">25,5%</SelectItem>
@@ -539,7 +538,7 @@ export default function InvoiceForm({
                   {item.taxIncluded
                     ? `sis. ALV ${formatCurrency(calculateItemTaxAmount(item))}`
                     : `+ ALV ${formatCurrency(
-                        calculateItemTaxAmount(item)
+                        calculateItemTaxAmount(item),
                       )} = ${formatCurrency(calculateItemTotalPrice(item))}`}
                   )
                 </Label>
@@ -727,7 +726,6 @@ export default function InvoiceForm({
                   value={invoice.sender.iban}
                   onChange={(e) => updateSender("iban", e.target.value)}
                   className="flex-1 text-sm"
-                  required
                 />
               </div>
 
@@ -742,7 +740,6 @@ export default function InvoiceForm({
                   value={invoice.sender.bic}
                   onChange={(e) => updateSender("bic", e.target.value)}
                   className="flex-1 text-sm"
-                  required
                 />
               </div>
             </div>
